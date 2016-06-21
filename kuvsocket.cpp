@@ -1,5 +1,11 @@
+#include "stdafx.h"
 #include "kuvsocket.h"
 #include <string>
+
+struct ConnectionUserData
+{
+	H_CONNECTION m_hConn;
+};
 
 KUVSocket::KUVSocket()
 	:m_nIdGen(0)
@@ -25,7 +31,33 @@ uv_tcp_t* KUVSocket::CreateSocket(H_CONNECTION& handle)
 		return ret;
 	}
 
+	m_MapConnections.insert(std::make_pair(handle, ret));
+
 	return ret;
+}
+
+bool KUVSocket::ReleaseSocket(H_CONNECTION & handle)
+{
+	bool bRet = false;
+
+	if (!handle)
+	{
+		sprintf_s(ErrorMsg, "KUVSocket::ReleaseSocket Fail, handle is empty");
+		return bRet;
+	}
+
+	MAP_CONNECTION::iterator it = m_MapConnections.find(handle);
+	if (it == m_MapConnections.end())
+	{
+		sprintf_s(ErrorMsg, "KUVSocket::ReleaseSocket Fail, can't find handle : %d", handle);
+		return bRet;
+	}
+
+	free(it->second);
+	m_MapConnections.erase(it);
+
+	bRet = true;
+	return bRet;
 }
 
 H_CONNECTION KUVSocket::Listen(LPCSTR szAddress, UINT nPort)
@@ -61,9 +93,10 @@ H_CONNECTION KUVSocket::Listen(LPCSTR szAddress, UINT nPort)
 	m_nError = uv_tcp_bind(pListen, addrBind);
 	if (m_nError)
 	{
-		ReleaseSocket(hListener);
+		ReleaseSocket(ret);
 		return ret;
 	}
+
 	m_nError = uv_listen((uv_stream_t*)pListen, SOMAXCONN, OnConnectionIncoming);
 	if (m_nError)
 	{
@@ -71,4 +104,18 @@ H_CONNECTION KUVSocket::Listen(LPCSTR szAddress, UINT nPort)
 	}
 
 	return ret;
+}
+
+void KUVSocket::OnConnectionIncoming(uv_stream_t * pListener, int status)
+{
+	/*ConnectionUserData* pData = (ConnectionUserData*)pListener->data;
+	KUVSocket* pSocket = pData->pParentSocket;
+	if (status != 0)
+	{
+		pSocket->OnError(pData->m_hConn, status);
+		return;
+	}
+	pSocket->Accept(pData->m_hConn, pListener);*/
+
+	// do something for
 }

@@ -37,7 +37,7 @@ extern "C" {
 #   define UV_EXTERN __declspec(dllimport)
 # else
     /* Building static library. */
-#   define UV_EXTERN /* nothing */
+#   define UV_EXTERN __declspec(dllexport)/* nothing */
 # endif
 #elif __GNUC__ >= 4
 # define UV_EXTERN __attribute__((visibility("default")))

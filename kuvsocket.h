@@ -4,19 +4,23 @@
 #pragma once
 
 #include "uv.h"
-
+#include <unordered_map>
 
 typedef UINT H_CONNECTION;
+
+static char ErrorMsg[128];
 
 class KUVSocket
 {
 public:
 	const static H_CONNECTION INVALID_HANDLER = 0;
-	static char ErrorMsg[128];
 
 private:
-	UINT	m_nIdGen;
-	INT		m_nError;
+	typedef std::unordered_map<H_CONNECTION, uv_tcp_t*> MAP_CONNECTION;
+	
+	MAP_CONNECTION	m_MapConnections;
+	UINT			m_nIdGen;
+	INT				m_nError;
 
 	/// function
 public:
@@ -27,6 +31,10 @@ public:
 
 protected:
 	uv_tcp_t* CreateSocket(H_CONNECTION& handle);
+	bool ReleaseSocket(H_CONNECTION& handle);
+
+private :
+	static void OnConnectionIncoming(uv_stream_t *server, int status);
 };
 
 #endif // !_K_UV_SOCKET_H_
