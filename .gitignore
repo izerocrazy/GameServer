@@ -56,3 +56,4 @@ UpgradeLog*.XML
 Debug
 Release
 ipch
+/GameServer.VC.db
