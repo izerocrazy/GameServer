@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "kuvsocket.h"
+#include "kuvserversocket.h"
 
 int main()
 {
@@ -11,11 +11,11 @@ int main()
 
 	char word = fgetc(stdin);
 
-	KUVSocket* socket = new KUVSocket;
+	KUVServerSocket* socket = new KUVServerSocket;
 	if (word == '0')
 	{
 		H_CONNECTION handle = socket->Listen("127.0.0.1", 8888);
-		if (handle == KUVSocket::INVALID_HANDLER)
+		if (handle == KUVServerSocket::INVALID_HANDLER)
 		{
 			fprintf(stdout, "Listen Fail");
 			return -1;
@@ -23,7 +23,7 @@ int main()
 	}
 	else
 	{
-		if (socket->Connect("127.0.0.1", 8888) == KUVSocket::INVALID_HANDLER)
+		if (socket->Connect("127.0.0.1", 8888) == KUVServerSocket::INVALID_HANDLER)
 		{
 			fprintf(stdout, "Connect Fail");
 			return -1;
