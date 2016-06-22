@@ -3,6 +3,8 @@
 
 #pragma once
 
+#define _WINSOCK_DEPRECATED_NO_WARNINGS 1
+
 #include "uv.h"
 #include <unordered_map>
 
@@ -25,9 +27,10 @@ private:
 	/// function
 public:
 	KUVSocket();
-	virtual ~KUVSocket();
-	H_CONNECTION Listen(LPCSTR szAddress, UINT nPort);
-	H_CONNECTION Connect(LPCSTR szAddress, UINT nPort);
+	virtual			~KUVSocket();
+	H_CONNECTION	Listen(LPCSTR szAddress, UINT nPort);
+	H_CONNECTION	Connect(LPCSTR szAddress, UINT nPort);
+	void			Update();
 
 protected:
 	uv_tcp_t* CreateSocket(H_CONNECTION& handle);
@@ -35,6 +38,7 @@ protected:
 
 private :
 	static void OnConnectionIncoming(uv_stream_t *server, int status);
+	static void OnConnectionConnected(uv_connect_t *req, int status);
 };
 
 #endif // !_K_UV_SOCKET_H_

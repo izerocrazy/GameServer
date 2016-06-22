@@ -70,7 +70,7 @@ H_CONNECTION KUVSocket::Listen(LPCSTR szAddress, UINT nPort)
 		return ret;
 	}
 
-	hostent* host = gethostbyname(szAddress);
+	/*hostent* host = gethostbyname(szAddress);
 	if (!host)
 	{
 		sprintf_s(ErrorMsg, "KUVSocket::Listen Fail, get host Error, the szAddress is %s", szAddress);
@@ -80,7 +80,8 @@ H_CONNECTION KUVSocket::Listen(LPCSTR szAddress, UINT nPort)
 	struct sockaddr_in addrBind;
 	addrBind.sin_family = AF_INET;
 	memcpy(&addrBind.sin_addr, host->h_addr_list[0], sizeof(in_addr));
-	addrBind.sin_port = htons(nPort);
+	addrBind.sin_port = htons(nPort);*/
+	struct sockaddr_in addrBind = uv_ip4_addr(szAddress, nPort);
 
 	uv_tcp_t* pListen = NULL;
 	pListen = CreateSocket(ret);
@@ -106,6 +107,47 @@ H_CONNECTION KUVSocket::Listen(LPCSTR szAddress, UINT nPort)
 	return ret;
 }
 
+H_CONNECTION KUVSocket::Connect(LPCSTR szAddress, UINT nPort)
+{
+	H_CONNECTION ret = INVALID_HANDLER;
+
+	if (!szAddress)
+	{
+		sprintf_s(ErrorMsg, "KUVSocket::Listen Fail, the Address is emtpy");
+		return ret;
+	}
+
+	struct sockaddr_in addrConn = uv_ip4_addr(szAddress, nPort);
+
+	uv_tcp_t* pConn = NULL;
+	pConn = CreateSocket(ret);
+
+	uv_connect_t* pReq = (uv_connect_t*)malloc(sizeof(uv_connect_t));
+	int nRet = uv_tcp_connect(pReq, pConn, addrConn, OnConnectionConnected);
+
+	return ret;
+}
+
+/////// Event
+void KUVSocket::OnConnectionConnected(uv_connect_t* req, int status)
+{
+	/*uv_stream_t* pHandle = req->handle;
+	ConnectionUserData* pData = (ConnectionUserData*)req->handle->data;
+	KUvSocket* pSocket = pData->pParentSocket;
+	free(req);
+	req = NULL;
+
+	if (status != 0)
+	{
+		pSocket->OnError(pData->m_hConn, status);
+		return;
+	}
+	uv_read_start((uv_stream_t*)pHandle, AllocReadBuffer, OnConnectionRead);
+	pSocket->OnConnected(pData->m_hConn);*/
+
+	fprintf_s(stdout, "yes connect success");
+}
+
 void KUVSocket::OnConnectionIncoming(uv_stream_t * pListener, int status)
 {
 	/*ConnectionUserData* pData = (ConnectionUserData*)pListener->data;
@@ -118,4 +160,10 @@ void KUVSocket::OnConnectionIncoming(uv_stream_t * pListener, int status)
 	pSocket->Accept(pData->m_hConn, pListener);*/
 
 	// do something for
+	fprintf_s(stdout, "some one connection");
+}
+
+void KUVSocket::Update ()
+{
+	uv_run(uv_default_loop(), UV_RUN_NOWAIT);
 }

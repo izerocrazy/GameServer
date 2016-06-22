@@ -5,6 +5,7 @@
 *.orig
 *.sdf
 *.suo
+*.db
 core
 vgcore.*
 .buildstamp
