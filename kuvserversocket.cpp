@@ -182,6 +182,52 @@ void KUVServerSocket::Update ()
 	uv_run(uv_default_loop(), UV_RUN_NOWAIT);
 }
 
+H_CONNECTION KUVServerSocket::Accept(uv_stream_t* pListen)
+{
+	H_CONNECTION hAccept = INVALID_HANDLER;
+
+	if (!pListen)
+	{
+		sprintf_s(ErrorMsg, "KUVServerSocket::Accept Fail, pListen is empty");
+		return hAccept;
+	}
+
+	ConnectionUserData* pData = (ConnectionUserData*)pListen->data;
+	if (!pData)
+	{
+		sprintf_s(ErrorMsg, "KUVServerSocket::Accept Fail, the user data of uv_listen is empty");
+		return hAccept;
+	}
+
+	H_CONNECTION handle = pData->m_hConn;
+	if (handle < 0 || handle > m_nIdGen)
+	{
+		sprintf_s(ErrorMsg, "%s\n KUVServerSocket::Accept Fail, the handle of uv_listen is empty", ErrorMsg);
+		return hAccept;
+	}
+
+	uv_tcp_t* pAccept = CreateSocket(hAccept);
+	if (!pAccept)
+	{
+		sprintf_s(ErrorMsg, "%s\n KUVServerSocket::Accept Fail, CreateSocket Error", ErrorMsg);
+		return hAccept;
+	}
+
+	m_nError = uv_accept(pListen, (uv_stream_t*)pAccept);
+	if (m_nError == 0)
+	{
+		this->OnAccepted(handle, hAccept, m_nError);
+		m_nError = uv_read_start((uv_stream_t*)pAccept, AllocReadBuffer, OnConnectionRead);
+	}
+	else 
+	{
+		this->OnAccepted(handle, INVALID_HANDLER, m_nError);
+		Close(hAccept);
+		hAccept = INVALID_HANDLER;
+	}
+	return hAccept;
+}
+
 /////// Event
 void KUVServerSocket::OnError(H_CONNECTION handle, int status)
 {
@@ -202,7 +248,7 @@ void KUVServerSocket::OnConnectionIncoming(uv_stream_t * pListener, int status)
 		pSocket->OnError(pData->m_hConn, status);
 		return;
 	}
-	pSocket->Accept(pData->m_hConn, pListener);
+	pSocket->Accept(pListener);
 }
 
 void KUVServerSocket::OnConnectionConnected(uv_connect_t* req, int status)
@@ -240,4 +286,44 @@ void KUVServerSocket::OnConnectionClosed(uv_handle_t* handle)
 	}
 
 	(pData->m_pServerSocket)->ReleaseSocket(pData->m_hConn);
+}
+
+void KUVServerSocket::OnConnectionRead(uv_stream_t* pHandle, ssize_t nread, uv_buf_t buf)
+{
+	ConnectionUserData* pData = (ConnectionUserData*)pHandle->data;
+	KUVServerSocket* pSocket = pData->m_pServerSocket;
+
+	/*if (nread > 0)//recv buffer已满，处理接收缓冲
+	{
+		KCircularBuffer& buff = pData->readBuffer;
+		KG_CONFIRM_ERROR((ssize_t)buff.GetSpace() >= nread);
+		buff.IncrementWritten(nread);
+
+		pSocket->ProcessReadEvent(pHandle, nread, buf);
+	}
+	else if (nread == UV_ENOBUFS)
+	{
+		pSocket->ProcessReadEvent(pHandle, nread, buf);
+	}
+	else if (nread == UV_EOF)
+	{
+		pSocket->Close(pData->m_hConn); //客户端shutdown,不是错误
+	}
+	else
+	{
+		pSocket->OnError(pData->m_hConn, nread);
+	}*/
+
+	if (nread < 0)
+	{
+		if (nread == UV_EOF)
+		{
+			pSocket->Close(pData->m_hConn);
+		}
+	}
+}
+
+uv_buf_t KUVServerSocket::AllocReadBuffer(uv_handle_t*handle, size_t suggested_size)
+{
+	return uv_buf_init((char*)malloc(suggested_size), suggested_size);
 }

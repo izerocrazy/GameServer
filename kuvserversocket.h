@@ -36,17 +36,21 @@ public:
 
 	virtual	void	OnError(H_CONNECTION handle, int nState);
 	virtual void	OnDisconnect(H_CONNECTION handle, int nState) {};
+	virtual void	OnAccepted(H_CONNECTION hListen, H_CONNECTION hNew, int nError) {};
 
 protected:
-	uv_tcp_t* CreateSocket(H_CONNECTION& handle);
-	bool ReleaseSocket(H_CONNECTION& handle);
+	uv_tcp_t*		CreateSocket(H_CONNECTION& handle);
+	bool			ReleaseSocket(H_CONNECTION& handle);
+	H_CONNECTION	Accept(uv_stream_t* pListen);
 
 private :
-	uv_tcp_t* getUVHandle(H_CONNECTION handle);
+	uv_tcp_t*		getUVHandle(H_CONNECTION handle);
 
-	static void OnConnectionIncoming(uv_stream_t *server, int status);
-	static void OnConnectionConnected(uv_connect_t *req, int status);
-	static void OnConnectionClosed(uv_handle_t* handle);
+	static void		OnConnectionIncoming(uv_stream_t *server, int status);
+	static void		OnConnectionConnected(uv_connect_t *req, int status);
+	static void		OnConnectionClosed(uv_handle_t* handle);
+	static void		OnConnectionRead(uv_stream_t* handle, ssize_t nread, uv_buf_t buf);
+	static uv_buf_t AllocReadBuffer(uv_handle_t* handle, size_t suggested_size);
 };
 
 #endif // !_K_UV_SOCKET_H_

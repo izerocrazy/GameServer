@@ -24,7 +24,7 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="kuvsocket.h">
+    <ClInclude Include="kuvserversocket.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -35,7 +35,7 @@
     <ClCompile Include="GameServer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="kuvsocket.cpp">
+    <ClCompile Include="kuvserversocket.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
