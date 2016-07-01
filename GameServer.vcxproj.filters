@@ -24,7 +24,10 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="kuvserversocket.h">
+    <ClInclude Include="kcircularbuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="kuvsocket.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -35,7 +38,10 @@
     <ClCompile Include="GameServer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="kuvserversocket.cpp">
+    <ClCompile Include="kcircularbuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="kuvsocket.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
