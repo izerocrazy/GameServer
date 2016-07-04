@@ -40,7 +40,7 @@ int main()
 			uv_run(uv_default_loop(), UV_RUN_NOWAIT);
 			if (word != '0')
 			{
-				char temp = getchar();
+				char temp = '1';
 				socket->Send(handle, &temp, sizeof(char));
 			}
 	}

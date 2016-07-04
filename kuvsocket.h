@@ -75,7 +75,11 @@ struct PackReader
 	UINT				nRemainSize;
 };
 
-static char ErrorMsg[1024];
+static char g_ErrorMsg[1024];
+static void g_ClearError()
+{
+	memset(g_ErrorMsg, 0, 1024 * sizeof(char));
+}
 
 class KUVSocket
 {

@@ -33,7 +33,7 @@ uv_tcp_t* KUVSocket::CreateSocket(H_CONNECTION& handle)
 	m_nError = uv_tcp_init(uv_default_loop(), ret);
 	if (m_nError)
 	{
-		sprintf_s(ErrorMsg, "KUVSocket::CreateSocket Fail, int fail, uv error is %d\n %s", m_nError, ErrorMsg);
+		sprintf_s(g_ErrorMsg, "KUVSocket::CreateSocket Fail, int fail, uv error is %d\n %s", m_nError, g_ErrorMsg);
 		return ret;
 	}
 
@@ -60,14 +60,14 @@ bool KUVSocket::ReleaseSocket(H_CONNECTION & handle)
 
 	if (!handle)
 	{
-		sprintf_s(ErrorMsg, "KUVSocket::ReleaseSocket Fail, handle is empty\n%s", ErrorMsg);
+		sprintf_s(g_ErrorMsg, "KUVSocket::ReleaseSocket Fail, handle is empty\n%s", g_ErrorMsg);
 		return bRet;
 	}
 
 	MAP_CONNECTION::iterator it = m_MapConnections.find(handle);
 	if (it == m_MapConnections.end())
 	{
-		sprintf_s(ErrorMsg, "KUVSocket::ReleaseSocket Fail, can't find handle : %d\n%s", handle, ErrorMsg);
+		sprintf_s(g_ErrorMsg, "KUVSocket::ReleaseSocket Fail, can't find handle : %d\n%s", handle, g_ErrorMsg);
 		return bRet;
 	}
 
@@ -87,7 +87,7 @@ H_CONNECTION KUVSocket::Listen(LPCSTR szAddress, UINT nPort)
 
 	if (!szAddress)
 	{
-		sprintf_s(ErrorMsg, "KUVSocket::Listen Fail, the address is empty\n%s", ErrorMsg);
+		sprintf_s(g_ErrorMsg, "KUVSocket::Listen Fail, the address is empty\n%s", g_ErrorMsg);
 		return ret;
 	}
 
@@ -108,7 +108,7 @@ H_CONNECTION KUVSocket::Listen(LPCSTR szAddress, UINT nPort)
 	pListen = CreateSocket(ret);
 	if (!pListen)
 	{
-		sprintf_s(ErrorMsg, "KUVSocket::Listen Fail, create socket Error\n%s", ErrorMsg);
+		sprintf_s(g_ErrorMsg, "KUVSocket::Listen Fail, create socket Error\n%s", g_ErrorMsg);
 		return ret;
 	}
 
@@ -134,7 +134,7 @@ H_CONNECTION KUVSocket::Connect(LPCSTR szAddress, UINT nPort)
 
 	if (!szAddress)
 	{
-		sprintf_s(ErrorMsg, "KUVSocket::Listen Fail, the Address is emtpy\n%s", ErrorMsg);
+		sprintf_s(g_ErrorMsg, "KUVSocket::Listen Fail, the Address is emtpy\n%s", g_ErrorMsg);
 		return ret;
 	}
 
@@ -156,7 +156,7 @@ BOOL KUVSocket::Close(H_CONNECTION handle)
 	uv_tcp_t* pHandle = getUVHandle(handle);
 	if (!pHandle)
 	{
-		sprintf_s(ErrorMsg, "KUVSocket::Close Fail, Can't find uv handle by socket handle : %d\n%s", handle,ErrorMsg);
+		sprintf_s(g_ErrorMsg, "KUVSocket::Close Fail, Can't find uv handle by socket handle : %d\n%s", handle,g_ErrorMsg);
 		return bRet;
 	}
 
@@ -190,7 +190,7 @@ BOOL KUVSocket::ShutDown(H_CONNECTION handle)
 
 	if (handle <= 0 || handle > m_nIdGen)
 	{
-		sprintf_s(ErrorMsg, "KUVSocket::ShutDown Fail, the handle is Error : %d\n%s", handle, ErrorMsg);
+		sprintf_s(g_ErrorMsg, "KUVSocket::ShutDown Fail, the handle is Error : %d\n%s", handle, g_ErrorMsg);
 		return bRet;
 	}
 
@@ -206,7 +206,7 @@ BOOL KUVSocket::ShutDown(H_CONNECTION handle)
 			free(pShutdown);
 			pShutdown = NULL;
 		}*/
-		sprintf_s(ErrorMsg, "KUVSocket::ShutDown Fail, uv shot down get uv Error Code :%d\n%s", m_nError, ErrorMsg);
+		sprintf_s(g_ErrorMsg, "KUVSocket::ShutDown Fail, uv shot down get uv Error Code :%d\n%s", m_nError, g_ErrorMsg);
 		return bRet;
 	}
 
@@ -217,29 +217,30 @@ BOOL KUVSocket::ShutDown(H_CONNECTION handle)
 BOOL KUVSocket::Send(H_CONNECTION handle, LPSTR pData, UINT nDataLen)
 {
 	BOOL bRet = false;
+	g_ClearError();
 
 	// check
 	if (handle < 1 || handle > m_nIdGen)
 	{
-		sprintf_s(ErrorMsg, "KUVSocket::Send Fail, the handle is Error : %d\n%s", handle,ErrorMsg);
+		sprintf_s(g_ErrorMsg, "KUVSocket::Send Fail, the handle is Error : %d\n%s", handle,g_ErrorMsg);
 		return bRet;
 	}
 
 	if (!pData)
 	{
-		sprintf_s(ErrorMsg, "KUVSocket::Send Fail, the send data is emtpy\n%s", ErrorMsg);
+		sprintf_s(g_ErrorMsg, "KUVSocket::Send Fail, the send data is emtpy\n%s", g_ErrorMsg);
 		return bRet;
 	}
 
 	uv_tcp_t* pTcp = getUVHandle(handle);
 	if (!pTcp)
 	{
-		sprintf_s(ErrorMsg, "KUVSocket::Send Fail, can't get uv_tcp_t with handle : %d\n%s", handle, ErrorMsg);
+		sprintf_s(g_ErrorMsg, "KUVSocket::Send Fail, can't get uv_tcp_t with handle : %d\n%s", handle, g_ErrorMsg);
 		return bRet;
 	}
 	if (!uv_is_writable((uv_stream_t*)pTcp))
 	{
-		sprintf_s(ErrorMsg, "KUVSocket::Send Fail,this pTcp is unable for writing: %d\n%s", handle, ErrorMsg);
+		sprintf_s(g_ErrorMsg, "KUVSocket::Send Fail,this pTcp is unable for writing: %d\n%s", handle, g_ErrorMsg);
 		return bRet;
 	}
 
@@ -260,7 +261,7 @@ BOOL KUVSocket::Send(H_CONNECTION handle, LPSTR pData, UINT nDataLen)
 		delete pHeader;
 		delete pSendReq;
 
-		sprintf_s(ErrorMsg, "KUVSocket::Send Fail, uv_write get UV Error Code: %d\n%s", m_nError, ErrorMsg);
+		sprintf_s(g_ErrorMsg, "KUVSocket::Send Fail, uv_write get UV Error Code: %d\n%s", m_nError, g_ErrorMsg);
 		return bRet;
 	}
 
@@ -297,28 +298,28 @@ H_CONNECTION KUVSocket::Accept(uv_stream_t* pListen)
 
 	if (!pListen)
 	{
-		sprintf_s(ErrorMsg, "KUVSocket::Accept Fail, pListen is empty\n%s", ErrorMsg);
+		sprintf_s(g_ErrorMsg, "KUVSocket::Accept Fail, pListen is empty\n%s", g_ErrorMsg);
 		return hAccept;
 	}
 
 	ConnectionUserData* pData = (ConnectionUserData*)pListen->data;
 	if (!pData)
 	{
-		sprintf_s(ErrorMsg, "KUVSocket::Accept Fail, the user data of uv_listen is empty\n%s", ErrorMsg);
+		sprintf_s(g_ErrorMsg, "KUVSocket::Accept Fail, the user data of uv_listen is empty\n%s", g_ErrorMsg);
 		return hAccept;
 	}
 
 	H_CONNECTION handle = pData->Conn;
 	if (handle < 0 || handle > m_nIdGen)
 	{
-		sprintf_s(ErrorMsg, "KUVSocket::Accept Fail, the handle of uv_listen is empty\n%s", ErrorMsg);
+		sprintf_s(g_ErrorMsg, "KUVSocket::Accept Fail, the handle of uv_listen is empty\n%s", g_ErrorMsg);
 		return hAccept;
 	}
 
 	uv_tcp_t* pAccept = CreateSocket(hAccept);
 	if (!pAccept)
 	{
-		sprintf_s(ErrorMsg, "KUVSocket::Accept Fail, CreateSocket Error\n%s", ErrorMsg);
+		sprintf_s(g_ErrorMsg, "KUVSocket::Accept Fail, CreateSocket Error\n%s", g_ErrorMsg);
 		return hAccept;
 	}
 
@@ -402,8 +403,8 @@ void KUVSocket::ProcessReadEvent(uv_stream_t* pReader, ssize_t nRead, uv_buf_t& 
 void KUVSocket::OnError(H_CONNECTION handle, int status)
 {
 	m_nError = status;
-	memset(ErrorMsg, 0, 1024 * sizeof(char));
-	sprintf_s(ErrorMsg, "KUVSocket Get libuv Error Status:%d\n%s", status, ErrorMsg);
+	g_ClearError();
+	sprintf_s(g_ErrorMsg, "KUVSocket Get libuv Error Status:%d\n%s", status, g_ErrorMsg);
 	this->Close(handle);
 }
 
