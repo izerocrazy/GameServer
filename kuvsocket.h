@@ -75,7 +75,7 @@ struct PackReader
 	UINT				nRemainSize;
 };
 
-static char ErrorMsg[128];
+static char ErrorMsg[1024];
 
 class KUVSocket
 {
@@ -108,7 +108,6 @@ public:
 	virtual void	OnAccepted(H_CONNECTION hListen, H_CONNECTION hNew, int nError) {};
 	virtual void OnWriteCompleted(H_CONNECTION hConn, Header* header) {};
 	virtual void OnConnected(H_CONNECTION hConn) {
-		Send(hConn, "1", sizeof(char));
 	};
 
 	virtual LPSTR AllocReadBuff(uv_tcp_t* handler, size_t& nSize);

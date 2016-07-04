@@ -29,7 +29,7 @@ uv_tcp_t* KUVSocket::CreateSocket(H_CONNECTION& handle)
 	m_nIdGen++;
 	handle = m_nIdGen;
 
-	uv_tcp_t* ret = (uv_tcp_t*)malloc(sizeof(uv_tcp_t*));
+	uv_tcp_t* ret = (uv_tcp_t*)malloc(sizeof(uv_tcp_t));
 	m_nError = uv_tcp_init(uv_default_loop(), ret);
 	if (m_nError)
 	{
@@ -402,6 +402,7 @@ void KUVSocket::ProcessReadEvent(uv_stream_t* pReader, ssize_t nRead, uv_buf_t& 
 void KUVSocket::OnError(H_CONNECTION handle, int status)
 {
 	m_nError = status;
+	memset(ErrorMsg, 0, 1024 * sizeof(char));
 	sprintf_s(ErrorMsg, "KUVSocket Get libuv Error Status:%d\n%s", status, ErrorMsg);
 	this->Close(handle);
 }
