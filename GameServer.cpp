@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "KUVSocket.h"
 #include <iostream>
+#include "ksocketmgr.h"
 
 int main()
 {
@@ -12,14 +13,14 @@ int main()
 
 	char word = fgetc(stdin);
 
-	KUVSocket* socket = new KUVSocket;
+	InitUVSocket();
 	H_CONNECTION handle = KUVSocket::INVALID_HANDLER;
 	if (word == '0')
 	{
-		handle = socket->Listen("127.0.0.1", 8888);
+		handle = CreateSocket(0, "127.0.0.1", 7777);
 		if (handle == KUVSocket::INVALID_HANDLER)
 		{
-			fprintf(stdout, "Listen Fail");
+			fprintf(stdout, "Listen Fail : %s", GetUVScoketErrorMsg());
 			return -1;
 		}
 
@@ -28,21 +29,21 @@ int main()
 	}
 	else
 	{
-		if ((handle = socket->Connect("127.0.0.1", 8888)) == KUVSocket::INVALID_HANDLER)
+		if ((handle = CreateSocket(1, "127.0.0.1", 7777)) == KUVSocket::INVALID_HANDLER)
 		{
-			fprintf(stdout, "Connect Fail");
+			fprintf(stdout, "Connect Fail: %s", GetUVScoketErrorMsg());
 			return -1;
 		}
 	}
 
 	while (1)
 	{
-			uv_run(uv_default_loop(), UV_RUN_NOWAIT);
-			if (word != '0')
-			{
-				char temp = '1';
-				socket->Send(handle, &temp, sizeof(char));
-			}
+		SocketUpdate();
+		if (word != '0')
+		{
+			char temp = '1';
+			SocketSendData(handle, &temp, sizeof(char));
+		}
 	}
 
 	return 0;

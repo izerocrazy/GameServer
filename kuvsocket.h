@@ -6,6 +6,7 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS 1
 
 #include "uv.h"
+#include "error.h"
 #include <unordered_map>
 
 typedef UINT H_CONNECTION;
@@ -75,11 +76,6 @@ struct PackReader
 	UINT				nRemainSize;
 };
 
-static char g_ErrorMsg[1024];
-static void g_ClearError()
-{
-	memset(g_ErrorMsg, 0, 1024 * sizeof(char));
-}
 
 class KUVSocket
 {
