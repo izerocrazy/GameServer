@@ -383,7 +383,8 @@ void KUVSocket::ProcessReadEvent(uv_stream_t* pReader, ssize_t nRead, uv_buf_t& 
 			this->OnRead(pData->Conn, pData->Reader.pHeader, (LPSTR)recvBuff.GetBufferStart(), pData->Reader.nRemainSize);
 			recvBuff.Remove(pData->Reader.nRemainSize);
 		}
-		else {
+		else 
+		{
 			char* buff = _getReadBuffer();
 			recvBuff.Read(buff, pData->Reader.nRemainSize);
 			this->OnRead(pData->Conn, pData->Reader.pHeader, buff, pData->Reader.nRemainSize);

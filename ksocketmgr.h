@@ -32,5 +32,7 @@ extern "C" void _DLLExport SocketUpdate();
 
 extern "C" BOOL _DLLExport SocketSendData(H_CONNECTION handle, char* data, int nLen);
 
+static KUVSocket * g_pUVSocket = NULL;
+
 #endif // !_K_SOCKET_MGR_H
 #pragma once

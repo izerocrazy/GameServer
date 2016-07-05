@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "ksocketmgr.h"
 
-KUVSocket * g_pUVSocket = NULL;
 
 char* GetUVScoketErrorMsg()
 {

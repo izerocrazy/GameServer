@@ -76,6 +76,8 @@ struct PackReader
 	UINT				nRemainSize;
 };
 
+typedef void (*FUNC_READ)();
+static FUNC_READ g_FuncRead = NULL;
 
 class KUVSocket
 {
@@ -102,12 +104,16 @@ public:
 	BOOL						ShutDown(H_CONNECTION handle);
 	BOOL						Send(H_CONNECTION handle, LPSTR pData, UINT nDataLen);
 
-	virtual void OnRead(H_CONNECTION handle, PackageHeaderBase* pHeader, LPSTR pData, UINT nLen) {};
+	virtual void	OnRead(H_CONNECTION handle, PackageHeaderBase* pHeader, LPSTR pData, UINT nLen) {
+		if (g_FuncRead)
+			g_FuncRead();
+	};
 	virtual	void	OnError(H_CONNECTION handle, int nState);
 	virtual void	OnDisconnect(H_CONNECTION handle, int nState) {};
 	virtual void	OnAccepted(H_CONNECTION hListen, H_CONNECTION hNew, int nError) {};
-	virtual void OnWriteCompleted(H_CONNECTION hConn, Header* header) {};
-	virtual void OnConnected(H_CONNECTION hConn) {
+	virtual void	OnWriteCompleted(H_CONNECTION hConn, Header* header) {};
+	virtual void	OnConnected(H_CONNECTION hConn) {
+	
 	};
 
 	virtual LPSTR AllocReadBuff(uv_tcp_t* handler, size_t& nSize);
