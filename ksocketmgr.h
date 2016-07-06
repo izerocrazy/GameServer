@@ -20,6 +20,9 @@
 #define eUV_SERVER_SOCKET 0
 #define eUV_CLIENT_SOCKET 1
 
+// ÉùÃ÷
+extern KUVSocket * g_pUVSocket;
+
 extern "C" PCHAR _DLLExport GetUVScoketErrorMsg();
 
 extern "C" LPVOID _DLLExport InitUVSocket();
@@ -28,11 +31,13 @@ extern "C" BOOL _DLLExport UninitUVSocket();
 
 extern "C" H_CONNECTION _DLLExport CreateSocket(int nType, char* szIP, int nPort);
 
+extern "C" void _DLLExport CloseSocket(H_CONNECTION handle);
+
 extern "C" void _DLLExport SocketUpdate();
 
 extern "C" BOOL _DLLExport SocketSendData(H_CONNECTION handle, char* data, int nLen);
 
-static KUVSocket * g_pUVSocket = NULL;
+extern "C" void _DLLExport SetReadCallback(FUNC_READ func);
 
 #endif // !_K_SOCKET_MGR_H
 #pragma once

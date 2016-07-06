@@ -5,6 +5,19 @@
 #include "KUVSocket.h"
 #include <iostream>
 #include "ksocketmgr.h"
+#include "tinyxml2.h"
+
+using namespace tinyxml2;
+
+void ReadFunc()
+{
+	XMLPrinter printer;
+	printer.OpenElement("foo");
+	printer.PushAttribute("foo", "bar");
+	printer.CloseElement();
+
+	fprintf_s(stdout, "call ReadFunc%d", SocketSendData(1, printer.Str(), printer.CStrSize()));
+}
 
 int main()
 {
@@ -12,12 +25,13 @@ int main()
 	uv_tcp_init(uv_default_loop(), ret);*/
 
 	char word = fgetc(stdin);
+	int nPort = 6666;
 
 	InitUVSocket();
 	H_CONNECTION handle = KUVSocket::INVALID_HANDLER;
 	if (word == '0')
 	{
-		handle = CreateSocket(0, "127.0.0.1", 7777);
+		handle = CreateSocket(0, "127.0.0.1", nPort);
 		if (handle == KUVSocket::INVALID_HANDLER)
 		{
 			fprintf(stdout, "Listen Fail : %s", GetUVScoketErrorMsg());
@@ -25,25 +39,22 @@ int main()
 		}
 
 		fprintf(stdout, "Listen server : %d", handle);
-		uv_run(uv_default_loop(), UV_RUN_DEFAULT);
+		// uv_run(uv_default_loop(), UV_RUN_DEFAULT);
 	}
 	else
 	{
-		if ((handle = CreateSocket(1, "127.0.0.1", 7777)) == KUVSocket::INVALID_HANDLER)
+		if ((handle = CreateSocket(1, "127.0.0.1", nPort)) == KUVSocket::INVALID_HANDLER)
 		{
 			fprintf(stdout, "Connect Fail: %s", GetUVScoketErrorMsg());
 			return -1;
 		}
 	}
 
+	SetReadCallback(ReadFunc);
+	bool bSend = false;
 	while (1)
 	{
 		SocketUpdate();
-		if (word != '0')
-		{
-			char temp = '1';
-			SocketSendData(handle, &temp, sizeof(char));
-		}
 	}
 
 	return 0;

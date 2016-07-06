@@ -2,6 +2,10 @@
 #include "kuvsocket.h"
 #include "kcircularbuffer.h"
 #include <string>
+#include "ksocketmgr.h"
+
+// 定义全局变量
+FUNC_READ g_FuncRead;
 
 struct ConnectionUserData
 {
@@ -441,6 +445,9 @@ void KUVSocket::OnConnectionConnected(uv_connect_t* req, int status)
 	}
 	uv_read_start((uv_stream_t*)pHandle, AllocReadBuffer, OnConnectionRead);
 	pSocket->OnConnected(pData->Conn);
+
+	char temp = '1';
+	SocketSendData(pData->Conn, &temp, sizeof(char));
 }
 
 void KUVSocket::OnConnectionClosed(uv_handle_t* handle)

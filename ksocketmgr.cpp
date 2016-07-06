@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ksocketmgr.h"
 
+KUVSocket * g_pUVSocket;
 
 char* GetUVScoketErrorMsg()
 {
@@ -92,6 +93,14 @@ H_CONNECTION CreateSocket(int nType, char* szIP, int nPort)
 	return hRet;
 }
 
+void CloseSocket(H_CONNECTION handle)
+{
+	if (g_pUVSocket)
+	{
+		g_pUVSocket->Close(handle);
+	}
+}
+
 void SocketUpdate()
 {
 	if (g_pUVSocket)
@@ -126,4 +135,9 @@ BOOL SocketSendData(H_CONNECTION handle, char* data, int nLen)
 
 	bRet = TRUE;
 	return bRet;
+}
+
+void SetReadCallback(FUNC_READ func)
+{
+	g_FuncRead = func;
 }
