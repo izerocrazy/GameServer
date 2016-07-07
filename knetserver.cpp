@@ -30,7 +30,7 @@ BOOL KNetServer::ProcessPacket (H_CONNECTION handle, char* szRead, int nLen)
 	printer.CloseElement();
 	printer.CloseElement();
 
-	fprintf_s(stdout, "call ReadFunc%d", SocketSendData(handle, printer.Str(), printer.CStrSize()));
+	fprintf_s(stdout, "call ReadFunc%d", SocketSendData(this, handle, printer.Str(), printer.CStrSize()));
 
 	bRet = TRUE;
 	return bRet;

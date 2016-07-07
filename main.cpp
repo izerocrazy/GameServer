@@ -13,11 +13,9 @@ int main()
 	char word = fgetc(stdin);
 	int nPort = 6666;
 
-	InitUVSocket();
-	H_CONNECTION handle = KUVSocket::INVALID_HANDLER;
 	if (word == '0')
 	{
-		if (CreateSocket(0, "127.0.0.1", nPort) == KUVSocket::INVALID_HANDLER)
+		if (CreateServer("127.0.0.1", nPort) == NULL)
 		{
 			fprintf(stdout, "KGameServer::CreateSocket Fail");
 			return -1;
@@ -27,7 +25,7 @@ int main()
 	}
 	else
 	{
-		if (CreateSocket(1, "127.0.0.1", nPort) == KUVSocket::INVALID_HANDLER)
+		if (CreateClient("127.0.0.1", nPort) == NULL)
 		{
 			fprintf_s(stdout, "KGameTestClient::CreateClient Fail");
 			return -1;

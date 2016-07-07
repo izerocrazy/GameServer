@@ -544,16 +544,6 @@ void KUVSocket::OnConnectionShutDown(uv_shutdown_t* req, int status)
 	pSocket->Close(pData->Conn);
 }
 
-void KUVSocket::OnConnected(H_CONNECTION handle, bool bSuccess)
-{
-	if (g_FuncConnect)
-	{
-		if (handle < 0 || handle > m_nIdGen)
-			return;
-
-		g_FuncConnect(handle, bSuccess);
-	}
-}
 
 ////////////////////////////////
 // Memery

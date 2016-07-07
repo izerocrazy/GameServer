@@ -27,7 +27,7 @@ void KNetClient::OnConnected(H_CONNECTION handle, bool bSuccess)
 	else
 	{
 		char temp = '1';
-		SocketSendData(handle, &temp, 1);
+		SocketSendData(this, handle, &temp, 1);
 	}
 }
 
@@ -45,7 +45,7 @@ BOOL KNetClient::ProcessPacket(H_CONNECTION handle, char* szRead, int nLen)
 	printer.CloseElement();
 	printer.CloseElement();
 
-	fprintf_s(stdout, "call ReadFunc%d", SocketSendData(handle, printer.Str(), printer.CStrSize()));
+	fprintf_s(stdout, "call ReadFunc%d", SocketSendData(this, handle, printer.Str(), printer.CStrSize()));
 
 	bRet = TRUE;
 	return bRet;

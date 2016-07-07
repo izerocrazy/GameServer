@@ -106,7 +106,7 @@ public:
 	virtual void	OnDisconnect(H_CONNECTION handle, int nState) {};
 	virtual void	OnAccepted(H_CONNECTION hListen, H_CONNECTION hNew, int nError) {};
 	virtual void	OnWriteCompleted(H_CONNECTION hConn, Header* header) {};
-	virtual void	OnConnected(H_CONNECTION hConn, bool bConnectSuccess);
+	virtual void	OnConnected(H_CONNECTION hConn, bool bConnectSuccess) {};
 
 	virtual LPSTR AllocReadBuff(uv_tcp_t* handler, size_t& nSize);
 	virtual void FreeReadBuff(uv_tcp_t* handler, LPSTR pBuf, size_t nSize);
