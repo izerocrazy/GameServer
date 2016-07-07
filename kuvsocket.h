@@ -76,13 +76,6 @@ struct PackReader
 	UINT				nRemainSize;
 };
 
-// 声明全局变量
-typedef void (*FUNC_READ)(H_CONNECTION handle, char* szRead, int nLen);
-extern FUNC_READ g_FuncRead;
-
-typedef void(*FUNC_CONNECT)(H_CONNECTION handle, bool bSuccess);
-extern FUNC_CONNECT g_FuncConnect;
-
 class KUVSocket
 {
 public:

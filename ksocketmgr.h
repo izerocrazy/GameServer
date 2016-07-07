@@ -21,25 +21,39 @@
 #define eUV_CLIENT_SOCKET 1
 
 // ÉùÃ÷
+
+class KSocketManager
+{
+public:
+	KSocketManager();
+	virtual ~KSocketManager();
+
+private:
+
+};
+
 extern KUVSocket * g_pUVSocket;
 
 extern "C" PCHAR _DLLExport GetUVScoketErrorMsg();
 
+// del
 extern "C" LPVOID _DLLExport InitUVSocket();
 
+// del
 extern "C" BOOL _DLLExport UninitUVSocket();
 
+// del
 extern "C" H_CONNECTION _DLLExport CreateSocket(int nType, char* szIP, int nPort);
+
+extern "C" KUVSocket* _DLLExport CreateServer(char* szIP, int nPort);
+
+extern "C" KUVSocket* _DLLExport CreateClient(char* szIP, int nPort);
 
 extern "C" void _DLLExport CloseSocket(H_CONNECTION handle);
 
 extern "C" void _DLLExport SocketUpdate();
 
 extern "C" BOOL _DLLExport SocketSendData(H_CONNECTION handle, char* data, int nLen);
-
-extern "C" void _DLLExport SetReadCallback(FUNC_READ func);
-
-extern "C" void _DLLExport SetConnectCallback(FUNC_CONNECT func);
 
 #endif // !_K_SOCKET_MGR_H
 #pragma once

@@ -4,10 +4,6 @@
 #include <string>
 #include "ksocketmgr.h"
 
-// 定义全局变量
-FUNC_READ g_FuncRead;
-FUNC_CONNECT g_FuncConnect;
-
 struct ConnectionUserData
 {
 	H_CONNECTION Conn;
