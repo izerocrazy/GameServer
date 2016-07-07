@@ -39,12 +39,15 @@
     <ClInclude Include="tinyxml2.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="kgameserver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="kgameclient.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="GameServer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="kcircularbuffer.cpp">
@@ -57,6 +60,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="tinyxml2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="kgameserver.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="kgameclient.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

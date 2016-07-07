@@ -492,10 +492,10 @@ void KUVSocket::OnConnectionRead(uv_stream_t* pHandle, ssize_t nread, uv_buf_t b
 	else
 	{
 		fprintf_s(stdout, "\nsome one send %d data\n", nread);
-		for (int i = 0; i < nread; i++)
+		/*for (int i = 0; i < nread; i++)
 		{
 			fprintf_s(stdout, "%d", buf.base[i]);
-		}
+		}*/
 
 		KCircularBuffer& buff = pData->ReadBuffer;
 		if ((ssize_t)buff.GetSpace() >= nread)
@@ -550,6 +550,17 @@ void KUVSocket::OnConnectionShutDown(uv_shutdown_t* req, int status)
 
 	pSocket->Close(pData->Conn);
 }
+
+void KUVSocket::OnRead(H_CONNECTION handle, PackageHeaderBase* pHeader, LPSTR pData, UINT nLen)
+{
+	if (g_FuncRead)
+	{
+		if (handle < 0 || handle > m_nIdGen)
+			return;
+
+		g_FuncRead(handle, pData, nLen);
+	}
+};
 
 uv_buf_t KUVSocket::AllocReadBuffer(uv_handle_t*handle, size_t suggested_size)
 {
