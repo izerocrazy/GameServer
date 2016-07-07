@@ -5,8 +5,8 @@
 #include "KUVSocket.h"
 #include <iostream>
 #include "ksocketmgr.h"
-#include "kgameserver.h"
-#include "kgameclient.h"
+#include "knetserver.h"
+#include "knetclient.h"
 
 int main()
 {
@@ -15,21 +15,19 @@ int main()
 
 	InitUVSocket();
 	H_CONNECTION handle = KUVSocket::INVALID_HANDLER;
-	KGameServer* server = NULL;
-	KGameClient* client = NULL;
 	if (word == '0')
 	{
-		if (KGameServer::CreateServer("127.0.0.1", nPort) == FALSE)
+		if (CreateSocket(0, "127.0.0.1", nPort) == KUVSocket::INVALID_HANDLER)
 		{
 			fprintf(stdout, "KGameServer::CreateSocket Fail");
 			return -1;
 		}
 
-		server = KGameServer::GetInstance();
+		fprintf(stdout, "GameServer Bind success, is listin port: %d", nPort);
 	}
 	else
 	{
-		if (KGameClient::CreateClient("127.0.0.1", nPort) == FALSE)
+		if (CreateSocket(1, "127.0.0.1", nPort) == KUVSocket::INVALID_HANDLER)
 		{
 			fprintf_s(stdout, "KGameTestClient::CreateClient Fail");
 			return -1;
@@ -39,14 +37,7 @@ int main()
 	bool bSend = false;
 	while (1)
 	{
-		if (server != NULL)
-		{
-			client->Update();
-		}
-		else
-		{
-			server->Update();
-		}
+		SocketUpdate();
 	}
 
 	return 0;

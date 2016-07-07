@@ -6,6 +6,7 @@
 
 // 定义全局变量
 FUNC_READ g_FuncRead;
+FUNC_CONNECT g_FuncConnect;
 
 struct ConnectionUserData
 {
@@ -430,8 +431,6 @@ void KUVSocket::OnConnectionIncoming(uv_stream_t * pListener, int status)
 
 void KUVSocket::OnConnectionConnected(uv_connect_t* req, int status)
 {
-	fprintf_s(stdout, "yes connect success");
-
 	uv_stream_t* pHandle = req->handle;
 	ConnectionUserData* pData = (ConnectionUserData*)req->handle->data;
 	KUVSocket* pSocket = pData->ServerSocket;
@@ -440,14 +439,12 @@ void KUVSocket::OnConnectionConnected(uv_connect_t* req, int status)
 
 	if (status != 0)
 	{
+		pSocket->OnConnected(pData->Conn, false);
 		pSocket->OnError(pData->Conn, status);
 		return;
 	}
 	uv_read_start((uv_stream_t*)pHandle, AllocReadBuffer, OnConnectionRead);
-	pSocket->OnConnected(pData->Conn);
-
-	char temp = '1';
-	SocketSendData(pData->Conn, &temp, sizeof(char));
+	pSocket->OnConnected(pData->Conn, true);
 }
 
 void KUVSocket::OnConnectionClosed(uv_handle_t* handle)
@@ -551,16 +548,19 @@ void KUVSocket::OnConnectionShutDown(uv_shutdown_t* req, int status)
 	pSocket->Close(pData->Conn);
 }
 
-void KUVSocket::OnRead(H_CONNECTION handle, PackageHeaderBase* pHeader, LPSTR pData, UINT nLen)
+void KUVSocket::OnConnected(H_CONNECTION handle, bool bSuccess)
 {
-	if (g_FuncRead)
+	if (g_FuncConnect)
 	{
 		if (handle < 0 || handle > m_nIdGen)
 			return;
 
-		g_FuncRead(handle, pData, nLen);
+		g_FuncConnect(handle, bSuccess);
 	}
-};
+}
+
+////////////////////////////////
+// Memery
 
 uv_buf_t KUVSocket::AllocReadBuffer(uv_handle_t*handle, size_t suggested_size)
 {

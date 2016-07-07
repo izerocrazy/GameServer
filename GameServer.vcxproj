@@ -153,9 +153,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="error.h" />
-    <ClInclude Include="kgameserver.h" />
+    <ClInclude Include="knetserver.h" />
     <ClInclude Include="kcircularbuffer.h" />
-    <ClInclude Include="kgameclient.h" />
+    <ClInclude Include="knetclient.h" />
     <ClInclude Include="ksocketmgr.h" />
     <ClInclude Include="kuvsocket.h" />
     <ClInclude Include="stdafx.h" />
@@ -163,8 +163,8 @@
     <ClInclude Include="tinyxml2.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="kgameserver.cpp" />
-    <ClCompile Include="kgameclient.cpp" />
+    <ClCompile Include="knetserver.cpp" />
+    <ClCompile Include="knetclient.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="kcircularbuffer.cpp" />
     <ClCompile Include="ksocketmgr.cpp" />

@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "ksocketmgr.h"
+#include "knetserver.h"
+#include "knetclient.h"
 
 KUVSocket * g_pUVSocket;
 
@@ -19,9 +21,6 @@ void* InitUVSocket()
 		sprintf_s(g_ErrorMsg, "KSocketMgr::InitUVSocket Fail, it's init already \n%s", g_ErrorMsg);
 		return pRet;
 	}
-
-	g_pUVSocket = new KUVSocket;
-	pRet = g_pUVSocket;
 
 	return pRet;
 }
@@ -53,7 +52,7 @@ H_CONNECTION CreateSocket(int nType, char* szIP, int nPort)
 
 	g_ClearError();
 
-	if (g_pUVSocket == NULL)
+	if (g_pUVSocket != NULL)
 	{
 		sprintf_s(g_ErrorMsg, "KSocketMgr::CreateSocket Fail, it should init before call Create \n%s", g_ErrorMsg);
 		return hRet;
@@ -73,6 +72,7 @@ H_CONNECTION CreateSocket(int nType, char* szIP, int nPort)
 
 	if (nType == eUV_SERVER_SOCKET)
 	{
+		g_pUVSocket = (KUVSocket*)new KNetServer;
 		hRet = g_pUVSocket->Listen(szIP, nPort);
 		if (hRet == KUVSocket::INVALID_HANDLER)
 		{
@@ -82,6 +82,7 @@ H_CONNECTION CreateSocket(int nType, char* szIP, int nPort)
 	}
 	else if (nType == eUV_CLIENT_SOCKET)
 	{
+		g_pUVSocket = (KUVSocket*)new KNetClient;
 		if ((hRet= g_pUVSocket->Connect(szIP, nPort)) == KUVSocket::INVALID_HANDLER)
 		{
 			sprintf_s(g_ErrorMsg, "KSocketMgr::CreateSocket Fail, UVSocket::Connect Error,get empty handle \n %s", g_ErrorMsg);
@@ -140,4 +141,9 @@ BOOL SocketSendData(H_CONNECTION handle, char* data, int nLen)
 void SetReadCallback(FUNC_READ func)
 {
 	g_FuncRead = func;
+}
+
+void SetConnectCallback(FUNC_CONNECT func)
+{
+	g_FuncConnect = func;
 }

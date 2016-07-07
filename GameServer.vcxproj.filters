@@ -39,10 +39,10 @@
     <ClInclude Include="tinyxml2.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="kgameserver.h">
+    <ClInclude Include="knetclient.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="kgameclient.h">
+    <ClInclude Include="knetserver.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -65,10 +65,10 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="kgameserver.cpp">
+    <ClCompile Include="knetclient.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="kgameclient.cpp">
+    <ClCompile Include="knetserver.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

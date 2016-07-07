@@ -39,5 +39,7 @@ extern "C" BOOL _DLLExport SocketSendData(H_CONNECTION handle, char* data, int n
 
 extern "C" void _DLLExport SetReadCallback(FUNC_READ func);
 
+extern "C" void _DLLExport SetConnectCallback(FUNC_CONNECT func);
+
 #endif // !_K_SOCKET_MGR_H
 #pragma once
