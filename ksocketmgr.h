@@ -24,12 +24,15 @@
 // ÉùÃ÷
 extern "C" PCHAR _DLLExport GetUVScoketErrorMsg();
 
-// del
-extern "C" H_CONNECTION _DLLExport CreateSocket(int nType, char* szIP, int nPort);
+extern "C" HANDLE _DLLExport CreateServerSocket(char* szIP, int nPort, FUNC_READ funcRead = NULL);
+extern "C" BOOL _DLLExport SetServerReadCallBack(HANDLE socket, FUNC_READ func);
 
-extern "C" HANDLE _DLLExport CreateServer(char* szIP, int nPort);
-
-extern "C" HANDLE _DLLExport CreateClient(char* szIP, int nPort);
+extern "C" HANDLE _DLLExport CreateClientSocket(char* szIP, 
+																						int nPort, 
+																						FUNC_READ funcReadCallBack = NULL, 
+																						FUNC_CONNECT funcConnectCallBack = NULL);
+extern "C" BOOL _DLLExport SetClientReadCallBack(HANDLE socket, FUNC_READ func);
+extern "C" BOOL _DLLExport SetClientConnectCallBack(HANDLE socket, FUNC_CONNECT func);
 
 extern "C" void _DLLExport CloseSocket(HANDLE socket, H_CONNECTION handle);
 

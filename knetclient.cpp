@@ -3,9 +3,10 @@
 #include "ksocketmgr.h"
 #include "tinyxml2.h"
 
-
 KNetClient::KNetClient()
 {
+	m_funcReadCallBack = NULL;
+	m_funcConnectCallBack = NULL;
 }
 
 KNetClient::~KNetClient()
@@ -14,7 +15,10 @@ KNetClient::~KNetClient()
 
 void KNetClient::OnRead(H_CONNECTION handle, PackageHeaderBase* pHeader, LPSTR szRead, UINT nLen)
 {
-	ProcessPacket(handle, szRead, nLen);
+	if (m_funcReadCallBack)
+	{
+		m_funcReadCallBack(this, handle, szRead, nLen);
+	}
 }
 
 void KNetClient::OnConnected(H_CONNECTION handle, bool bSuccess)
@@ -24,28 +28,40 @@ void KNetClient::OnConnected(H_CONNECTION handle, bool bSuccess)
 		fprintf_s(stdout, "GameClient Connect %d Fail", handle);
 		return;
 	}
-	else
+
+	if (m_funcConnectCallBack)
 	{
-		char temp = '1';
-		SocketSendData(this, handle, &temp, 1);
+		m_funcConnectCallBack(this, handle, bSuccess);
 	}
 }
 
-BOOL KNetClient::ProcessPacket(H_CONNECTION handle, char* szRead, int nLen)
+BOOL KNetClient::SetConnectCallBack(FUNC_CONNECT func)
 {
 	BOOL bRet = FALSE;
 
-	tinyxml2::XMLPrinter printer;
-	printer.OpenElement("player");
-	printer.PushAttribute("id", 1);
-	printer.OpenElement("position");
-	printer.PushAttribute("x", 1);
-	printer.PushAttribute("y", 2);
-	printer.PushAttribute("z", 3);
-	printer.CloseElement();
-	printer.CloseElement();
+	if (func == NULL)
+	{
+		fprintf_s(stdout, "KNetClient::SetConnectCallBack Fail, the func is empty");
+		return bRet;
+	}
 
-	fprintf_s(stdout, "call ReadFunc%d", SocketSendData(this, handle, printer.Str(), printer.CStrSize()));
+	m_funcConnectCallBack = func;
+
+	bRet = TRUE;
+	return bRet;
+}
+
+BOOL KNetClient::SetReadCallBack(FUNC_READ func)
+{
+	BOOL bRet = FALSE;
+
+	if (func == NULL)
+	{
+		fprintf_s(stdout, "KNetClient::SetReadCallBack Fail, the func is empty");
+		return bRet;
+	}
+
+	m_funcReadCallBack = func;
 
 	bRet = TRUE;
 	return bRet;

@@ -76,6 +76,7 @@ struct PackReader
 	UINT				nRemainSize;
 };
 
+
 class KUVSocket
 {
 public:
@@ -137,4 +138,6 @@ private:
 	char*		_getReadBuffer();
 };
 
+typedef void (*FUNC_READ)(KUVSocket* socket, H_CONNECTION handle, char* szRead, int nLen);
+typedef void(*FUNC_CONNECT)(KUVSocket* socket, H_CONNECTION handle, bool bSuccess);
 #endif // !_K_UV_SOCKET_H_

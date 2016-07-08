@@ -16,11 +16,16 @@ public :
 	virtual void OnConnected(H_CONNECTION handle, bool bSuccess);
 
 public:
-	BOOL ProcessPacket(H_CONNECTION handle, char* szPacket, int nPacketLen);
 	void Update();
+	BOOL SetReadCallBack(FUNC_READ func);
+	BOOL SetConnectCallBack(FUNC_CONNECT func);
+
+public:
 	bool Connected;
 
 private:
+	FUNC_READ m_funcReadCallBack;
+	FUNC_CONNECT m_funcConnectCallBack;
 };
 
 #endif // !_K_GAME_TEST_CLIENT
