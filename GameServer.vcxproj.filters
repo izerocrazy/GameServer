@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="net">
+      <UniqueIdentifier>{9d1c2ad8-4beb-495d-b775-ef66cd4c2e4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="base">
+      <UniqueIdentifier>{1e6cdad5-96d6-496c-8586-6c163d05a989}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -24,52 +30,52 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="kcircularbuffer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="kuvsocket.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="error.h">
-      <Filter>头文件</Filter>
+      <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="ksocketmgr.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="tinyxml2.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="kcircularbuffer.h">
+      <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="knetclient.h">
-      <Filter>头文件</Filter>
+      <Filter>net</Filter>
     </ClInclude>
     <ClInclude Include="knetserver.h">
-      <Filter>头文件</Filter>
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="ksocketmgr.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="kuvsocket.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml2.h">
+      <Filter>base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="kcircularbuffer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="kuvsocket.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ksocketmgr.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="tinyxml2.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="knetclient.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="knetserver.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="gamemain.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="kcircularbuffer.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="knetclient.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="knetserver.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="ksocketmgr.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="kuvsocket.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml2.cpp">
+      <Filter>base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

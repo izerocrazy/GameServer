@@ -9,7 +9,7 @@
 #include "knetclient.h"
 #include "tinyxml2.h"
 
-void ProcessPacket (KUVSocket* socket, H_CONNECTION handle, char* szRead, int nLen)
+void ProcessPacket (void* socket, H_CONNECTION handle, char* szRead, int nLen)
 {
 	tinyxml2::XMLPrinter printer;
 	printer.OpenElement("player");
@@ -24,7 +24,7 @@ void ProcessPacket (KUVSocket* socket, H_CONNECTION handle, char* szRead, int nL
 	fprintf_s(stdout, "call ReadFunc%d", SocketSendData(socket, handle, printer.Str(), printer.CStrSize()));
 }
 
-void ConnectCallBack(KUVSocket* socket, H_CONNECTION handle, bool bSuccess)
+void ConnectCallBack(void* socket, H_CONNECTION handle, bool bSuccess)
 {
 	if (bSuccess)
 	{

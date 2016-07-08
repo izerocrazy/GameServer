@@ -138,6 +138,6 @@ private:
 	char*		_getReadBuffer();
 };
 
-typedef void (*FUNC_READ)(KUVSocket* socket, H_CONNECTION handle, char* szRead, int nLen);
-typedef void(*FUNC_CONNECT)(KUVSocket* socket, H_CONNECTION handle, bool bSuccess);
+typedef void (*FUNC_READ)(void* socket, H_CONNECTION handle, char* szRead, int nLen);
+typedef void(*FUNC_CONNECT)(void* socket, H_CONNECTION handle, bool bSuccess);
 #endif // !_K_UV_SOCKET_H_
