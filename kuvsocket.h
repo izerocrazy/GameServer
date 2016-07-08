@@ -83,9 +83,9 @@ public:
 	const static H_CONNECTION INVALID_HANDLER = 0;
 	const static UINT		 MAX_PACKAGE_SIZE = 0xffff;
 	const static UINT		 DEFAULT_READ_BUFFER = MAX_PACKAGE_SIZE * 2;
+	typedef std::unordered_map<H_CONNECTION, uv_tcp_t*> MAP_CONNECTION;
 
 private:
-	typedef std::unordered_map<H_CONNECTION, uv_tcp_t*> MAP_CONNECTION;
 	
 	MAP_CONNECTION	m_MapConnections;
 	UINT			m_nIdGen;
@@ -101,6 +101,7 @@ public:
 	BOOL						Close(H_CONNECTION handle);
 	BOOL						ShutDown(H_CONNECTION handle);
 	BOOL						Send(H_CONNECTION handle, LPSTR pData, UINT nDataLen);
+	MAP_CONNECTION GetConnectionMap() { return m_MapConnections; }
 
 	virtual void	OnRead(H_CONNECTION handle, PackageHeaderBase* pHeader, LPSTR pData, UINT nLen) {};
 	virtual	void	OnError(H_CONNECTION handle, int nState);

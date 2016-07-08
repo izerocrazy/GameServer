@@ -11,7 +11,7 @@
 
 void ProcessPacket (void* socket, H_CONNECTION handle, char* szRead, int nLen)
 {
-	tinyxml2::XMLPrinter printer;
+	/*tinyxml2::XMLPrinter printer;
 	printer.OpenElement("player");
 	printer.PushAttribute("id", 1);
 	printer.OpenElement("position");
@@ -21,7 +21,19 @@ void ProcessPacket (void* socket, H_CONNECTION handle, char* szRead, int nLen)
 	printer.CloseElement();
 	printer.CloseElement();
 
-	fprintf_s(stdout, "call ReadFunc%d", SocketSendData(socket, handle, printer.Str(), printer.CStrSize()));
+	fprintf_s(stdout, "call ReadFunc%d", SocketSendData(socket, handle, printer.Str(), printer.CStrSize()));*/
+
+	// 转发给所有的链接用户
+	KUVSocket* pSocket = (KUVSocket*)socket;
+	KUVSocket::MAP_CONNECTION map = pSocket->GetConnectionMap();
+	KUVSocket::MAP_CONNECTION::iterator it = map.begin();
+	while (it != map.end())
+	{
+		if (it->first != handle)
+			SocketSendData(socket, it->first, szRead, nLen);
+		
+		it++;
+	}
 }
 
 void ConnectCallBack(void* socket, H_CONNECTION handle, bool bSuccess)
