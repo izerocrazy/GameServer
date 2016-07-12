@@ -8,6 +8,9 @@
 #include "knetserver.h"
 #include "knetclient.h"
 #include "tinyxml2.h"
+#include "playermanager.h"
+
+KPlayerManager gPlayerManager;
 
 void ProcessPacket (void* socket, H_CONNECTION handle, char* szRead, int nLen)
 {
@@ -30,10 +33,17 @@ void ProcessPacket (void* socket, H_CONNECTION handle, char* szRead, int nLen)
 	if (ele != NULL && strcmp(ele->Name(), "player") == 0 
 		&& ele->Attribute("Action") != NULL && strcmp(ele->Attribute("Action"), "GetId") == 0)
 	{
+		KPlayer* player = gPlayerManager.CreatePlayer(socket, handle);
+		if (player == NULL)
+		{
+			fprintf(stdout, "PlayerManager CreatePlayer Fail");
+			return;
+		}
+
 		tinyxml2::XMLPrinter printer;
 		printer.OpenElement("player");
 		printer.PushAttribute("Action", "GetId");
-		printer.PushAttribute("Id", handle);
+		printer.PushAttribute("Id", (*player)["ID"].ToNumber());
 		printer.CloseElement();
 
 		SocketSendData(socket, handle, printer.Str(), printer.CStrSize());

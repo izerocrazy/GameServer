@@ -24,10 +24,25 @@
     <ClCompile Include="base\tinyxml2.cpp">
       <Filter>base</Filter>
     </ClCompile>
+    <ClCompile Include="base\variant.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\tinyxml2.h">
       <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\variant.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="playermanager.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

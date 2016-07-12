@@ -116,10 +116,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="base\tinyxml2.cpp" />
+    <ClCompile Include="base\variant.cpp" />
     <ClCompile Include="gamemain.cpp" />
+    <ClCompile Include="player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base\tinyxml2.h" />
+    <ClInclude Include="base\variant.h" />
+    <ClInclude Include="player.h" />
+    <ClInclude Include="playermanager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
