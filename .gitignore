@@ -59,3 +59,6 @@ ipch
 /GameServer.VC.db
 /GameServer.VC.VC.opendb
 *.db
+/UpgradeLog2.htm
+/UpgradeLog3.htm
+/UpgradeLog.htm

@@ -30,12 +30,6 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="error.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="kcircularbuffer.h">
-      <Filter>base</Filter>
-    </ClInclude>
     <ClInclude Include="knetclient.h">
       <Filter>net</Filter>
     </ClInclude>
@@ -48,19 +42,16 @@
     <ClInclude Include="kuvsocket.h">
       <Filter>net</Filter>
     </ClInclude>
-    <ClInclude Include="tinyxml2.h">
+    <ClInclude Include="..\base\error.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\base\kcircularbuffer.h">
       <Filter>base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="gamemain.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="kcircularbuffer.cpp">
-      <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="knetclient.cpp">
       <Filter>net</Filter>
@@ -74,7 +65,7 @@
     <ClCompile Include="kuvsocket.cpp">
       <Filter>net</Filter>
     </ClCompile>
-    <ClCompile Include="tinyxml2.cpp">
+    <ClCompile Include="..\base\kcircularbuffer.cpp">
       <Filter>base</Filter>
     </ClCompile>
   </ItemGroup>

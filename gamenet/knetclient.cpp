@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "knetclient.h"
 #include "ksocketmgr.h"
-#include "tinyxml2.h"
 
 KNetClient::KNetClient()
 {

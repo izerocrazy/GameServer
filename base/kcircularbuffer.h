@@ -1,7 +1,6 @@
 #ifndef _K_CIRCULAR_BUFFER_H
 #define _K_CIRCULAR_BUFFER_H
 
-#include "stdafx.h"
 #include <cstddef>
 #include <iostream>
 

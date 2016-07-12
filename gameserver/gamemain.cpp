@@ -23,16 +23,34 @@ void ProcessPacket (void* socket, H_CONNECTION handle, char* szRead, int nLen)
 
 	fprintf_s(stdout, "call ReadFunc%d", SocketSendData(socket, handle, printer.Str(), printer.CStrSize()));*/
 
-	// 转发给所有的链接用户
-	KUVSocket* pSocket = (KUVSocket*)socket;
-	KUVSocket::MAP_CONNECTION map = pSocket->GetConnectionMap();
-	KUVSocket::MAP_CONNECTION::iterator it = map.begin();
-	while (it != map.end())
+	tinyxml2::XMLDocument doc;
+	doc.Parse(szRead, nLen);
+
+	tinyxml2::XMLElement* ele = doc.RootElement();
+	if (ele != NULL && strcmp(ele->Name(), "player") == 0 
+		&& ele->Attribute("Action") != NULL && strcmp(ele->Attribute("Action"), "GetId") == 0)
 	{
-		if (it->first != handle)
-			SocketSendData(socket, it->first, szRead, nLen);
-		
-		it++;
+		tinyxml2::XMLPrinter printer;
+		printer.OpenElement("player");
+		printer.PushAttribute("Action", "GetId");
+		printer.PushAttribute("Id", handle);
+		printer.CloseElement();
+
+		SocketSendData(socket, handle, printer.Str(), printer.CStrSize());
+	}
+	else
+	{
+		// 转发给所有的链接用户
+		KUVSocket* pSocket = (KUVSocket*)socket;
+		KUVSocket::MAP_CONNECTION map = pSocket->GetConnectionMap();
+		KUVSocket::MAP_CONNECTION::iterator it = map.begin();
+		while (it != map.end())
+		{
+			if (it->first != handle)
+				SocketSendData(socket, it->first, szRead, nLen);
+
+			it++;
+		}
 	}
 }
 
