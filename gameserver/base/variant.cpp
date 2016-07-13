@@ -476,6 +476,8 @@ bool KVariant::LoadFromXmlString(const char* szXml, int nLen)
 	doc.Parse(szXml, nLen);
 
 	// 遍历 XML 的 Element
+	bRet = LoadFromXml(*this, &doc);
+	/*
 	for (const XMLElement* ele = doc.FirstChildElement(); ele; ele = ele->NextSiblingElement())
 	{
 		// 
@@ -487,13 +489,12 @@ bool KVariant::LoadFromXmlString(const char* szXml, int nLen)
 		{
 			loadFromXml((*this)[ele->Name()], ele);
 		}
-	}
+	}*/
 
-	bRet = true;
 	return bRet;
 }
 
-bool KVariant::loadFromXml(KVariant& variant, const XMLElement * root)
+bool KVariant::LoadFromXml(KVariant& variant, const XMLNode* root)
 {
 	bool bRet = false;
 
@@ -502,16 +503,19 @@ bool KVariant::loadFromXml(KVariant& variant, const XMLElement * root)
 		return bRet;
 	}
 
+	if (variant.GetIndexName() == NULL || strcmp(variant.GetIndexName(), root->Value()) != 0)
+		variant.SetIndexName(root->Value());
+
 	for (const XMLElement* ele = root->FirstChildElement(); ele; ele = ele->NextSiblingElement())
 	{
+		// todo: 因为我知道这里的第一个是 XMLText，所以这么写，蛋疼
 		if (ele->FirstChildElement() == NULL)
 		{
-			// 因为我知道这里的第一个是 XMLText，所以这么写，蛋疼
 			variant[ele->Name()] = ele->FirstChild()->Value();
 		}
 		else
 		{
-			loadFromXml(variant[ele->Name()], ele);
+			LoadFromXml(variant[ele->Name()], ele);
 		}
 	}
 

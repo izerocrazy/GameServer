@@ -9,6 +9,9 @@
 #include "knetclient.h"
 #include "tinyxml2.h"
 #include "playermanager.h"
+#include "tinyxml2.h"
+
+using namespace tinyxml2;
 
 KPlayerManager gPlayerManager;
 
@@ -23,15 +26,17 @@ void ProcessPacket (void* socket, H_CONNECTION handle, char* szRead, int nLen)
 	printer.PushAttribute("z", 3);
 	printer.CloseElement();
 	printer.CloseElement();*/
+	
+	tinyxml2::XMLDocument doc;
+	doc.Parse(szRead, nLen);
 
 	KVariant all;
-	all.LoadFromXmlString(szRead, nLen);
-	KVariant& v = all["root"];
+	all.LoadFromXml(all, doc.FirstChildElement());
 
 	// Get Route
-	if (strcmp(v["router"].ToString(), "player") == 0
-		&&(strcmp(v["action"].ToString(), "get") == 0
-			&& strcmp(v["param"].ToString(), "id") == 0) )
+	if (strcmp(all.GetIndexName(), "player") == 0
+		&&(strcmp(all["action"].ToString(), "get") == 0
+			&& strcmp(all["param"].ToString(), "id") == 0) )
 
 	/*if (ele != NULL && strcmp(ele->Name(), "player") == 0 
 		&& ele->Attribute("Action") != NULL && strcmp(ele->Attribute("Action"), "GetId") == 0)*/

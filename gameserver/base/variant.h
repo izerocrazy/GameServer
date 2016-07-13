@@ -254,13 +254,11 @@ public:
 	/* load                                                                     */
 	/************************************************************************/
 	bool LoadFromXmlString(const char* szXml, int nLen);
+	bool LoadFromXml(KVariant& variant, const XMLNode* node);
 
 	unsigned short GetType() { return m_uType; }
 	unsigned short GetIndexType() { return m_uIndexType; }
 	void ShowVariant(int nState = 0);
-
-private:
-	bool loadFromXml(KVariant& variant, const XMLElement* ele);
 
 protected:
 private:
