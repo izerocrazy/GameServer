@@ -462,3 +462,59 @@ void KVariant::ShowVariant(int nState)
 	printf("%s %s\n", szTempInfo, "end variant ");
 	return;
 }
+
+bool KVariant::LoadFromXmlString(const char* szXml, int nLen)
+{
+	bool bRet = false;
+
+	if (szXml == NULL || nLen < 0)
+	{
+		return bRet;
+	}
+
+	XMLDocument doc;
+	doc.Parse(szXml, nLen);
+
+	// 遍历 XML 的 Element
+	for (const XMLElement* ele = doc.FirstChildElement(); ele; ele = ele->NextSiblingElement())
+	{
+		// 
+		if (ele->FirstChildElement() == NULL)
+		{
+			(*this)[ele->Name()] = ele->Value();
+		}
+		else
+		{
+			loadFromXml((*this)[ele->Name()], ele);
+		}
+	}
+
+	bRet = true;
+	return bRet;
+}
+
+bool KVariant::loadFromXml(KVariant& variant, const XMLElement * root)
+{
+	bool bRet = false;
+
+	if (root == NULL)
+	{
+		return bRet;
+	}
+
+	for (const XMLElement* ele = root->FirstChildElement(); ele; ele = ele->NextSiblingElement())
+	{
+		if (ele->FirstChildElement() == NULL)
+		{
+			// 因为我知道这里的第一个是 XMLText，所以这么写，蛋疼
+			variant[ele->Name()] = ele->FirstChild()->Value();
+		}
+		else
+		{
+			loadFromXml(variant[ele->Name()], ele);
+		}
+	}
+
+	bRet = true;
+	return bRet;
+}

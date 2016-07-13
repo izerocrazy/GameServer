@@ -17,6 +17,9 @@
 
 #include <stddef.h>
 #include <map>
+#include "tinyxml2.h"
+
+using namespace tinyxml2;
 
 class KSimpleBuffer 
 {
@@ -247,10 +250,17 @@ public:
 	bool ToBool();
 	const char* ToString();
 
+	/************************************************************************/
+	/* load                                                                     */
+	/************************************************************************/
+	bool LoadFromXmlString(const char* szXml, int nLen);
 
 	unsigned short GetType() { return m_uType; }
 	unsigned short GetIndexType() { return m_uIndexType; }
 	void ShowVariant(int nState = 0);
+
+private:
+	bool loadFromXml(KVariant& variant, const XMLElement* ele);
 
 protected:
 private:

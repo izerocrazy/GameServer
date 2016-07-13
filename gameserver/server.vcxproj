@@ -125,6 +125,7 @@
     <ClInclude Include="base\variant.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playermanager.h" />
+    <ClInclude Include="router.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

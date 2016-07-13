@@ -22,16 +22,19 @@ void ProcessPacket (void* socket, H_CONNECTION handle, char* szRead, int nLen)
 	printer.PushAttribute("y", 2);
 	printer.PushAttribute("z", 3);
 	printer.CloseElement();
-	printer.CloseElement();
+	printer.CloseElement();*/
 
-	fprintf_s(stdout, "call ReadFunc%d", SocketSendData(socket, handle, printer.Str(), printer.CStrSize()));*/
+	KVariant all;
+	all.LoadFromXmlString(szRead, nLen);
+	KVariant& v = all["root"];
 
-	tinyxml2::XMLDocument doc;
-	doc.Parse(szRead, nLen);
+	// Get Route
+	if (strcmp(v["router"].ToString(), "player") == 0
+		&&(strcmp(v["action"].ToString(), "get") == 0
+			&& strcmp(v["param"].ToString(), "id") == 0) )
 
-	tinyxml2::XMLElement* ele = doc.RootElement();
-	if (ele != NULL && strcmp(ele->Name(), "player") == 0 
-		&& ele->Attribute("Action") != NULL && strcmp(ele->Attribute("Action"), "GetId") == 0)
+	/*if (ele != NULL && strcmp(ele->Name(), "player") == 0 
+		&& ele->Attribute("Action") != NULL && strcmp(ele->Attribute("Action"), "GetId") == 0)*/
 	{
 		KPlayer* player = gPlayerManager.CreatePlayer(socket, handle);
 		if (player == NULL)
