@@ -7,13 +7,12 @@
 #include "ksocketmgr.h"
 #include "knetserver.h"
 #include "knetclient.h"
-#include "tinyxml2.h"
 #include "playermanager.h"
-#include "tinyxml2.h"
-
-using namespace tinyxml2;
+#include "router.h"
+#include "gamemain.h"
 
 KPlayerManager gPlayerManager;
+KRouter gRouter;
 
 void ProcessPacket (void* socket, H_CONNECTION handle, char* szRead, int nLen)
 {
@@ -34,42 +33,8 @@ void ProcessPacket (void* socket, H_CONNECTION handle, char* szRead, int nLen)
 	all.LoadFromXml(all, doc.FirstChildElement());
 
 	// Get Route
-	if (strcmp(all.GetIndexName(), "player") == 0
-		&&(strcmp(all["action"].ToString(), "get") == 0
-			&& strcmp(all["param"].ToString(), "id") == 0) )
-
-	/*if (ele != NULL && strcmp(ele->Name(), "player") == 0 
-		&& ele->Attribute("Action") != NULL && strcmp(ele->Attribute("Action"), "GetId") == 0)*/
-	{
-		KPlayer* player = gPlayerManager.CreatePlayer(socket, handle);
-		if (player == NULL)
-		{
-			fprintf(stdout, "PlayerManager CreatePlayer Fail");
-			return;
-		}
-
-		tinyxml2::XMLPrinter printer;
-		printer.OpenElement("player");
-		printer.PushAttribute("Action", "GetId");
-		printer.PushAttribute("Id", (*player)["ID"].ToNumber());
-		printer.CloseElement();
-
-		SocketSendData(socket, handle, printer.Str(), printer.CStrSize());
-	}
-	else
-	{
-		// 转发给所有的链接用户
-		KUVSocket* pSocket = (KUVSocket*)socket;
-		KUVSocket::MAP_CONNECTION map = pSocket->GetConnectionMap();
-		KUVSocket::MAP_CONNECTION::iterator it = map.begin();
-		while (it != map.end())
-		{
-			if (it->first != handle)
-				SocketSendData(socket, it->first, szRead, nLen);
-
-			it++;
-		}
-	}
+	KRouter::FUNC_ROUTER func = (KRouter::FUNC_ROUTER) gRouter[all.GetIndexName()][KRouter::GetType(all["action"].ToString())].ToLongNumber();
+	func(socket, handle, all, szRead, nLen);
 }
 
 void ConnectCallBack(void* socket, H_CONNECTION handle, bool bSuccess)
@@ -85,6 +50,10 @@ int main()
 {
 	char word = fgetc(stdin);
 	int nPort = 6666;
+
+	// Router Setting
+	gRouter.Set("player", KRouter::eAT_Get, KPlayer::ProcessPacket_Get);
+	gRouter.Set("player", KRouter::eAT_Update, KPlayer::ProcessPacket_Update);
 
 	if (word == '0')
 	{

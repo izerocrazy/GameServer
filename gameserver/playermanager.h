@@ -35,13 +35,12 @@ public:
 		}
 
 		int nPlayerID = (*this)["IdGen"].ToNumber() + 1;
-		(*this)["IdGen"] = nPlayerID;
 
 		pRet = new KPlayer;
-		(*pRet)["ID"] = (*this)["IdGen"];
-		(*pRet)["Socket"] = (int)pSocket;
-		(*pRet)["Handle"] = nHandle;
+		if (pRet->Init(nPlayerID, pSocket, nHandle) == false)
+			return pRet;
 
+		(*this)["IdGen"] = nPlayerID;
 		(*this)[nPlayerID] = (int)pRet;
 
 		return pRet;

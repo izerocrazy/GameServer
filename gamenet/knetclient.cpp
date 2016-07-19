@@ -25,7 +25,7 @@ void KNetClient::OnConnected(H_CONNECTION handle, bool bSuccess)
 	if (bSuccess == false)
 	{
 		fprintf_s(stdout, "GameClient Connect %d Fail", handle);
-		return;
+		// return;
 	}
 
 	if (m_funcConnectCallBack)

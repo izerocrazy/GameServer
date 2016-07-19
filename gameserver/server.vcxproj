@@ -123,6 +123,7 @@
   <ItemGroup>
     <ClInclude Include="base\tinyxml2.h" />
     <ClInclude Include="base\variant.h" />
+    <ClInclude Include="gamemain.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playermanager.h" />
     <ClInclude Include="router.h" />

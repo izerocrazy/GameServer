@@ -555,6 +555,11 @@ void XMLUtil::ToStr( double v, char* buffer, int bufferSize )
     TIXML_SNPRINTF( buffer, bufferSize, "%.17g", v );
 }
 
+void XMLUtil::ToStr(long long v, char* buffer, int bufferSize)
+{
+    TIXML_SNPRINTF( buffer, bufferSize, "%lld", v );
+}
+
 
 bool XMLUtil::ToInt( const char* str, int* value )
 {
@@ -2367,6 +2372,12 @@ void XMLPrinter::PushText( double value )
     PushText( buf, false );
 }
 
+void XMLPrinter::PushText(long long value)
+{
+	char buf[BUF_SIZE];
+	XMLUtil::ToStr(value, buf, BUF_SIZE);
+	PushText(buf, false);
+}
 
 void XMLPrinter::PushComment( const char* comment )
 {

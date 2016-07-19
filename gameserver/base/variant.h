@@ -19,8 +19,6 @@
 #include <map>
 #include "tinyxml2.h"
 
-using namespace tinyxml2;
-
 class KSimpleBuffer 
 {
 public:
@@ -205,6 +203,7 @@ public:
 	KVariant& operator[](const char* szIndex);
 	KVariant& operator=(KVariant& );
 	KVariant& operator=(int nValue);
+	KVariant& operator=(long long llValue);
 	KVariant& operator=(char* szValue);
 	KVariant& operator=(const char* szValue);
 
@@ -254,7 +253,9 @@ public:
 	/* load                                                                     */
 	/************************************************************************/
 	bool LoadFromXmlString(const char* szXml, int nLen);
-	bool LoadFromXml(KVariant& variant, const XMLNode* node);
+	bool LoadFromXml(KVariant& variant, const tinyxml2::XMLNode* node);
+
+	bool ToXml(tinyxml2::XMLPrinter& printer);
 
 	unsigned short GetType() { return m_uType; }
 	unsigned short GetIndexType() { return m_uIndexType; }

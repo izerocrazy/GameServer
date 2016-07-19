@@ -577,6 +577,7 @@ public:
     static void ToStr( bool v, char* buffer, int bufferSize );
     static void ToStr( float v, char* buffer, int bufferSize );
     static void ToStr( double v, char* buffer, int bufferSize );
+    static void ToStr( long long v, char* buffer, int bufferSize );
 
     // converts strings to primitive types
     static bool	ToInt( const char* str, int* value );
@@ -2015,6 +2016,8 @@ public:
     void PushText( float value );
     /// Add a text node from a double.
     void PushText( double value );
+    /// Add a text node from a long long.
+    void PushText( long long value );
 
     /// Add a comment
     void PushComment( const char* comment );

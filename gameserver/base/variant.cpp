@@ -95,6 +95,12 @@ KVariant& KVariant::operator=(int nValue)
 	return *this;
 }
 
+KVariant& KVariant::operator=(long long llvalue)
+{
+	SetLongNumber(llvalue);
+	return *this;
+}
+
 KVariant& KVariant::operator=(char* szValue)
 {
 	SetString(szValue);
@@ -376,6 +382,11 @@ int KVariant::ToNumber()
 
 long long KVariant::ToLongNumber()
 {
+	if (m_uType == eVT_LONG_NUMBER)
+	{
+		return m_llNumber;
+	}
+
 	assert(0);
 	return 1;
 }
@@ -472,29 +483,16 @@ bool KVariant::LoadFromXmlString(const char* szXml, int nLen)
 		return bRet;
 	}
 
-	XMLDocument doc;
+	tinyxml2::XMLDocument doc;
 	doc.Parse(szXml, nLen);
 
 	// 遍历 XML 的 Element
 	bRet = LoadFromXml(*this, &doc);
-	/*
-	for (const XMLElement* ele = doc.FirstChildElement(); ele; ele = ele->NextSiblingElement())
-	{
-		// 
-		if (ele->FirstChildElement() == NULL)
-		{
-			(*this)[ele->Name()] = ele->Value();
-		}
-		else
-		{
-			loadFromXml((*this)[ele->Name()], ele);
-		}
-	}*/
 
 	return bRet;
 }
 
-bool KVariant::LoadFromXml(KVariant& variant, const XMLNode* root)
+bool KVariant::LoadFromXml(KVariant& variant, const tinyxml2::XMLNode* root)
 {
 	bool bRet = false;
 
@@ -506,7 +504,7 @@ bool KVariant::LoadFromXml(KVariant& variant, const XMLNode* root)
 	if (variant.GetIndexName() == NULL || strcmp(variant.GetIndexName(), root->Value()) != 0)
 		variant.SetIndexName(root->Value());
 
-	for (const XMLElement* ele = root->FirstChildElement(); ele; ele = ele->NextSiblingElement())
+	for (const tinyxml2::XMLElement* ele = root->FirstChildElement(); ele; ele = ele->NextSiblingElement())
 	{
 		// todo: 因为我知道这里的第一个是 XMLText，所以这么写，蛋疼
 		if (ele->FirstChildElement() == NULL)
@@ -519,6 +517,71 @@ bool KVariant::LoadFromXml(KVariant& variant, const XMLNode* root)
 		}
 	}
 
+	bRet = true;
+	return bRet;
+}
+
+bool KVariant::ToXml(tinyxml2::XMLPrinter& printer)
+{
+	bool bRet = false;
+
+	// index content
+	switch (GetIndexType())
+	{
+	case eVIT_NUMBER:
+		char buf[32];
+		memset(buf, 0, 32);
+		sprintf_s(buf, "%d", GetIndexNumber());
+		printer.OpenElement(buf);
+		break;
+	case eVIT_STRING:
+		printer.OpenElement(GetIndexName());
+		break;
+	}
+
+	// content 部分
+	switch (GetType())
+	{
+	case eVT_BOOL:
+		printer.PushText(GetBool());
+		break;
+	case eVT_FLOAT:
+		printer.PushText(GetFloat());
+		break;
+	case eVT_LONG_NUMBER:
+		printer.PushText(GetLongNumber());
+		break;
+	case eVT_NUMBER:
+		printer.PushText(GetNumber());
+		break;
+	case eVT_STRING:
+		if (m_Content.GetBuffer())
+		{
+			printer.PushText(m_Content.GetBuffer());
+		}
+		break;
+	}
+
+	// list
+	KListNode* pVar = GetHeader();
+	while (pVar != NULL)
+	{
+		((KVariant*)pVar)->ToXml(printer);
+
+		pVar = pVar->GetNext();
+	}
+
+	// tree
+	std::map<const char*,KTreeNode*>::iterator it = m_pChildren.begin();
+	for (; it != m_pChildren.end(); ++it)
+	{
+		if (it->second) {
+			KVariant* pVar = (KVariant*) it->second;
+			pVar->ToXml(printer);
+		}
+	}
+
+	printer.CloseElement();
 	bRet = true;
 	return bRet;
 }

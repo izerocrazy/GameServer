@@ -47,5 +47,8 @@
     <ClInclude Include="router.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="gamemain.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
