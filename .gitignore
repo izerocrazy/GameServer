@@ -62,3 +62,5 @@ ipch
 /UpgradeLog2.htm
 /UpgradeLog3.htm
 /UpgradeLog.htm
+/libuv/android-toolchain
+/libuv/build

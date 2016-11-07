@@ -68,7 +68,13 @@
         'src/queue.h',
         'src/uv-common.c',
         'src/uv-common.h',
-        'src/version.c'
+        'src/version.c',
+	'gamenet/stdafx.cpp',
+	'gamenet/kcircularbuffer.cpp',
+	'gamenet/knetclient.cpp',
+	'gamenet/knetserver.cpp',
+	'gamenet/ksocketmgr.cpp',
+	'gamenet/kuvsocket.cpp'
       ],
       'conditions': [
         [ 'OS=="win"', {
